@@ -3,14 +3,14 @@ class Contact{
 
     // database connection and table name
     private $conn;
-    private $table_name = "calender";
+    private $table_name = "contacts";
 
     // object properties
+    public $id;
     public $address;
     public $avatar;
     public $company;
     public $email;
-    public $id;
     public $job_title;
     public $last_name;
     public $nickname;
@@ -19,7 +19,7 @@ class Contact{
 
     // constructor with $db as database connection
     public function __construct($db){
-        $this-> = $db;
+       $this->conn = $db;
     }
 
     // read products
@@ -31,7 +31,7 @@ class Contact{
             FROM 
                   " . $this->table_name . "
                 ORDER BY
-                    calender_start";
+                    contact_start";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -48,8 +48,8 @@ class Contact{
         $query = "INSERT INTO
                 " . $this->table_name . "
                 SET
-                calendar_title=:title, calendar_desc=:description, calendar_start=:start,calendar_end=:end,calendar_user_id=:user,  created=:created";
-   
+               contact_title=:title, contact_desc=:description, contact_start=:start,contact_end=:end,contact_user_id=:user,  created=:created";
+
                 $this->address=htmlspecialchars(strip_tags($this->address));
                 $this->avatar=htmlspecialchars(strip_tags($this->avatar));
                 $this->company=htmlspecialchars(strip_tags($this->company));
@@ -64,7 +64,7 @@ class Contact{
                 $query = "INSERT INTO
                     " . $this->table_name . " 
                     SET
-                    calendar_title='".$this->title."', calendar_desc= '".$this->description."',calendar_start='".$this->start."',calendar_end='".$this->end."',calendar_user_id='".$this->user."', created='".$this->created."'";
+                    contact_title='".$this->title."', contact_desc= '".$this->description."',contact_start='".$this->start."',contact_end='".$this->end."',contact_user_id='".$this->user."', created='".$this->created."'";
 
                 if($this->conn->query($query))
                 {
@@ -75,13 +75,13 @@ class Contact{
 
             function readOne(){
                 $query = "SELECT
-                         *
-                        FROM
-                        " . $this->table_name . "
-                            WHERE
-                            contact_id = '".this->id."'
-                            LIMIT
-                            0,1";
+                *
+            FROM
+                " . $this->table_name . " 
+            WHERE
+                contact_id = '".$this->id."'
+            LIMIT
+                0,1";
 
                 $stmt = $this->conn->query($query);
                 $row = $stmt->fetch();
