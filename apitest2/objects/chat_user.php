@@ -1,162 +1,100 @@
 <?php
-class Calendar{
- 
+class Chat_user{
+
     // database connection and table name
     private $conn;
-    private $table_name = "calendar";
- 
+    private $table_name = "chat_user";
+    
     // object properties
+
     public $id;
-    public $title;
-    public $description;
-    public $start;
-    public $end;
-    public $user;
-    public $created;
+    public $chat_user_id;
+    public $chat_user_avatar;
+    public $chat_user_mood;
+    public $chat_user_name;
+    public $chat_user_status;
 
     // constructor with $db as database connection
-    public function __construct($db){
+
+    public function __constructor($db){
         $this->conn = $db;
     }
-    
+
     // read products
+
     function read(){
-    
-    	// select all query
-    	$query = "SELECT
-                *
-            FROM
-                " . $this->table_name . " 
-                
-            ORDER BY
-                calendar_start";
-    
-    	// prepare query statement
-    	$stmt = $this->conn->prepare($query);
-    
-    	// execute query
-    	$stmt->execute();
-    
-    	return $stmt;
+
+        // select all query
+    $query = "SELECT 
+            *
+            FROM 
+                  " . $this->table_name . "
+                ORDER BY
+                    chat_user_mood";
+
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+
+        // exacute query
+        $stmt->execute();
+
+        return $stmt;
     }
-    
+
+
     function create(){
-    
-    	// query to insert record
-    	$query = "INSERT INTO
-                " . $this->table_name . "
-            SET
-            calendar_title=:title, calendar_desc=:description, calendar_start=:start,calendar_end=:end,calendar_user_id=:user,  created=:created";
- 
-            # file_put_contents("log.txt",$query);
- /*
- $sql = $db->prepare("INSERT INTO " . $this->table_name . " (`calendar_title`, `calendar_desc=:description`, `calendar_start`,`calendar_end`,`calendar_user_id`) VALUES (:calendar_title, :calendar_desc, :calendar_start,:calendar_end,:calendar_user_id,:created)");
- $sql->bindParam(':calendar_title', $this->title, PDO::PARAM_STR);
- $sql->bindParam(':calendar_desc', $this-description>, PDO::PARAM_STR));
- $sql->bindParam(':calendar_start',$this->start , PDO::PARAM_INT);
- $sql->bindParam(':calendar_end',$this->end , PDO::PARAM_INT);
- $sql->bindParam(':calendar_user_id',$this->user , PDO::PARAM_INT);
- $sql->bindParam(':created',$this->created , PDO::PARAM_INT);
-            */
-    	// prepare query
-    #	$stmt = $this->conn->prepare($query);
-    
-    	// sanitize
-    	$this->title=htmlspecialchars(strip_tags($this->title));
-    	$this->calendar_desc=htmlspecialchars(strip_tags($this->description));
-        $this->start=htmlspecialchars(strip_tags($this->start));
-        $this->end=htmlspecialchars(strip_tags($this->end));
-        $this->user=htmlspecialchars(strip_tags($this->user));
-        $this->created=htmlspecialchars(strip_tags($this->created));
-        
+
+        // query to insert record
         $query = "INSERT INTO
                 " . $this->table_name . "
-            SET
-            calendar_title='".$this->title."', calendar_desc= '".$this->description."',calendar_start='".$this->start."',calendar_end='".$this->end."',calendar_user_id='".$this->user."', created='".$this->created."'";
-            
-           # $stmt = $this->conn->query($query);
+                SET
+                chat_user_id=:user_id, chat_user_avatar=:avatar, chat_user_mood=:mood, chat_user_name=:name,chat_user_status=:status,  created=:created";
+   
+                $this->chat_user_id=htmlspecialchars(strip_tags($this->chat_user_id));
+                $this->chat_user_avatar=htmlspecialchars(strip_tags($this->chat_user_avatar));
+                $this->chat_user_mood=htmlspecialchars(strip_tags($this->chat_user_mood));
+                $this->chat_user_name=htmlspecialchars(strip_tags($this->chat_user_name));
+                $this->chat_user_status=htmlspecialchars(strip_tags($this->chat_user_status));
+                
 
-        // bind values
-        /*
-    	$stmt->bindParam(":calendar_title", $this->title);
-    	$stmt->bindParam(":calendar_desc", $this->description);
-        $stmt->bindParam(":calendar_start", $this->start);
-        $stmt->bindParam(":calendar_end", $this->end);
-        $stmt->bindParam(":calendar_user_id", $this->user);
-        $stmt->bindParam(":created", $this->created);
-        */
-       # $sql = $this->conn->prepare("INSERT INTO sitrotest (calendar_title,calendar_desc, calendar_start,calendar_end,calendar_user_id,created) VALUES (? ,? ,?, ?, ?, ?)");
-/*
-        if($sql->execute(array($this->title, $this->description, $this->start,$this->end,$this->user,$this->created))){
-            return true;
-        }
-        */
-  
-        // execute query
-        /*
-    	if($stmt->execute()){
-    		return true;
-    	}
-*/
-if($this->conn->query($query))
-{
-    return true;
-}
-        return false;
-    
-    }
-    
-// used when filling up the update product form
-function readOne(){
- 
-    // query to read single record
-    $query = "SELECT
-                *
-            FROM
-                " . $this->table_name . " 
-            WHERE
-                calendar_id = '".$this->id."'
-            LIMIT
-                0,1";
- 
-    // prepare query statement
-   #$stmt= $this->conn->query( $query );
-  
-  #  $stmt = $this->conn->query($query);
-    // bind id of product to be updated
-   # $stmt->bindParam(1, $this->id);
- 
-    // execute query
-  # $stmt->execute();
- 
-    // get retrieved row
-  
-  #  $row = $stmt->fetch(PDO::FETCH_ASSOC);
- 
-    // set values to object properties
-/*
-    foreach ($conn->query($query) as $row) {
-        
-    $this->title = $row['calendar_title']; 
-    $this->description = $row['calendar_desc'];
-    $this->start = $row['calendar_start'];
-    $this->end = $row['calendar_end'];
-    $this->user = $row['calendar_user_id'];
-    $this->id = $row['calendar_id'];
-    
-    }
-    */
-    $stmt = $this->conn->query($query);
-    $row = $stmt->fetch();
-    $this->title = $row['calendar_title']; 
-    $this->description = $row['calendar_desc'];
-    $this->start = $row['calendar_start'];
-    $this->end = $row['calendar_end'];
-    $this->user = $row['calendar_user_id'];
-    $this->id = $row['calendar_id'];
-}
+                $query = "INSERT INTO
+                    " . $this->table_name . " 
+                    SET
+                    chat_user_id='".$this->user_id."', chat_user_avatar= '".$this->avatar."', chat_user_mood='".$this->mood."', chat_user_name='".$this->name."', chat_user_status='".$this->status."', created='".$this->created."'";
 
-// update the product
+                if($this->conn->query($query))
+                {
+                    return true;
+                }
+                    return false;
+            }
+
+            // used when filling up the update product form
+            function readOne(){
+ 
+                // query to read single record
+                $query = "SELECT
+                            *
+                        FROM
+                            " . $this->table_name . " 
+                        WHERE
+                            chat_id = '".$this->id."'
+                        LIMIT
+                            0,1";
+
+                $stmt = $this->conn->query($query);
+                $row = $stmt->fetch();
+                $this->id = $row['user_id'];
+                $this->chat_user_avatar = $row['chat_user_avatar'];
+                $this->chat_user_mood = $row['chat_user_mood'];
+                $this->chat_user_name = $row['chat_user_name'];
+                $this->chat_user_status = $row['chat_user_status'];
+               
+                
+            }
+
+
+            // update the product
 function update(){
  
     // update query

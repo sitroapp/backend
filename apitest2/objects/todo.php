@@ -54,44 +54,63 @@ class Todo{
  
             # file_put_contents("log.txt",$query);
  /*
- $sql = $db->prepare("INSERT INTO " . $this->table_name . " (`todo_title`, `calendar_desc=:description`, `calendar_start`,`calendar_end`,`calendar_user_id`) VALUES (:calendar_title, :calendar_desc, :calendar_start,:calendar_end,:calendar_user_id,:created)");
- $sql->bindParam(':calendar_title', $this->title, PDO::PARAM_STR);
- $sql->bindParam(':calendar_desc', $this-description>, PDO::PARAM_STR));
- $sql->bindParam(':calendar_start',$this->start , PDO::PARAM_INT);
- $sql->bindParam(':calendar_end',$this->end , PDO::PARAM_INT);
- $sql->bindParam(':calendar_user_id',$this->user , PDO::PARAM_INT);
+ $sql = $db->prepare("INSERT INTO " . $this->table_name . " (`todo_id`, `todo_notes=:notes`,`todo_title`,`todo_startdate`,`todo_duedate`,´todo_completed` tinyint`,`todo_starred` tinyint`,`todo_important` tinyint`,`todo_deleted` tinyint`,`todo_labels`,`todo_user`,) VALUES (:todo_id, :todo_notes, :todo_title, :todo_startdate, :todo_duedate, :todo_completed` tinyint, :todo_starred tinyint, :todo_important tinyint, :todo_deleted tinyint, :todo_labels, :todo_user)");
+ $sql->bindParam(':todo_id', $this->todo, PDO::PARAM_STR);
+ $sql->bindParam(':todo_notes', $this->notes>, PDO::PARAM_STR));
+ $sql->bindParam(':todo_title',$this->title , PDO::PARAM_INT);
+ $sql->bindParam(':todo_startdate',$this->startdate , PDO::PARAM_INT);
+ $sql->bindParam(':todo_duedate',$this->duedate , PDO::PARAM_INT);
+ $sql->bindParam(':todo_completed tinyint',$this->completed , PDO::PARAM_INT);
+ $sql->bindParam(':todo_starred tinyint', $this->starred , PDO::PARAM_STR);
+ $sql->bindParam(':todo_important tinyint', $this->important , PDO::PARAM_STR));
+ $sql->bindParam(':todo_deleted tinyint',$this->deleted , PDO::PARAM_INT);
+ $sql->bindParam(':todo_labels',$this->labels , PDO::PARAM_INT);
+ $sql->bindParam(':todo_user',$this->user , PDO::PARAM_INT);
  $sql->bindParam(':created',$this->created , PDO::PARAM_INT);
             */
     	// prepare query
     #	$stmt = $this->conn->prepare($query);
     
     	// sanitize
-    	$this->title=htmlspecialchars(strip_tags($this->title));
-    	$this->calendar_desc=htmlspecialchars(strip_tags($this->description));
-        $this->start=htmlspecialchars(strip_tags($this->start));
-        $this->end=htmlspecialchars(strip_tags($this->end));
+    	$this->todo=htmlspecialchars(strip_tags($this->todo));
+    	$this->notes=htmlspecialchars(strip_tags($this->notes));
+        $this->title=htmlspecialchars(strip_tags($this->title));
+        $this->startdate=htmlspecialchars(strip_tags($this->startdate));
+        $this->duedate=htmlspecialchars(strip_tags($this->duedate));
+        $this->completed=htmlspecialchars(strip_tags($this->completed));
+    	$this->starred=htmlspecialchars(strip_tags($this->starred));
+        $this->important=htmlspecialchars(strip_tags($this->important));
+        $this->deleted=htmlspecialchars(strip_tags($this->deleted));
+        $this->labels=htmlspecialchars(strip_tags($this->labels));
         $this->user=htmlspecialchars(strip_tags($this->user));
         $this->created=htmlspecialchars(strip_tags($this->created));
-        
+		
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-            calendar_title='".$this->title."', calendar_desc= '".$this->description."',calendar_start='".$this->start."',calendar_end='".$this->end."',calendar_user_id='".$this->user."', created='".$this->created."'";
-            
+         
+		  todo_id='".$this->id."',todo_notes='".$this->notes."',todo_title='".$this->title."',todo_startdate='".$this->startdate."', todo_duedate='".$this->duedate."',todo_completed='".$this->completed."',todo_starred='".$this->starred."',todo_important='".$this->important."',todo_deleted='".$this->deleted."',todo_labels='".$this->labels."',todo_user='".$this->user."'";
+			
+			
            # $stmt = $this->conn->query($query);
 
         // bind values
         /*
-    	$stmt->bindParam(":calendar_title", $this->title);
-    	$stmt->bindParam(":calendar_desc", $this->description);
-        $stmt->bindParam(":calendar_start", $this->start);
-        $stmt->bindParam(":calendar_end", $this->end);
-        $stmt->bindParam(":calendar_user_id", $this->user);
-        $stmt->bindParam(":created", $this->created);
+    	$stmt->bindParam(":todo_id", $this->id);
+    	$stmt->bindParam(":todo_notes", $this->notes);
+        $stmt->bindParam(":todo_title", $this->title);
+        $stmt->bindParam(":todo_startdate", $this->startdate);
+        $stmt->bindParam(":todo_duedate", $this->duedate);
+        $stmt->bindParam(":todo_completed", $this->completed);
+		$stmt->bindParam(":todo_starred", $this->starred);
+    	$stmt->bindParam(":todo_important", $this->important);
+        $stmt->bindParam(":todo_deleted", $this->deleted);
+        $stmt->bindParam(":todo_labels", $this->labels);
+        $stmt->bindParam(":todo_user", $this->user);
         */
-       # $sql = $this->conn->prepare("INSERT INTO sitrotest (calendar_title,calendar_desc, calendar_start,calendar_end,calendar_user_id,created) VALUES (? ,? ,?, ?, ?, ?)");
+       # $sql = $this->conn->prepare("INSERT INTO sitrotest (todo_id,todo_notes,todo_title,todo_startdate,todo_duedate,todo_completed,todo_starred,todo_important,todo_deleted,todo_labels,todo_user) VALUES (? ,? ,?, ?, ?, ?)");
 /*
-        if($sql->execute(array($this->title, $this->description, $this->start,$this->end,$this->user,$this->created))){
+        if($sql->execute(array($this->id, $this->notes, $this->title, $this->startdate, $this->duedate, $this_completed, $this_starred, $this->important, $this->deleted, $this->labels, $this->user))){
             return true;
         }
         */
@@ -119,7 +138,7 @@ function readOne(){
             FROM
                 " . $this->table_name . " 
             WHERE
-                calendar_id = '".$this->id."'
+                todo_id = '".$this->id."'
             LIMIT
                 0,1";
  
@@ -141,23 +160,36 @@ function readOne(){
 /*
     foreach ($conn->query($query) as $row) {
         
-    $this->title = $row['calendar_title']; 
-    $this->description = $row['calendar_desc'];
-    $this->start = $row['calendar_start'];
-    $this->end = $row['calendar_end'];
-    $this->user = $row['calendar_user_id'];
-    $this->id = $row['calendar_id'];
+	$this->todo = $row['todo'];
+	$this->notes = $row['notes'];
+	$this->title = $row['title'];
+	$this->startdate = $row['startdate'];
+	$this->duedate = $row['duedate'];
+	$this->completed = $row['completed'];
+	$this->starred = $row['starred'];
+	$this->important = $row['important'];
+	$this->deleted =$row[' deleted'];
+	$this->labels = $row['labels'];
+	$this->user = $row['user'];
+	$this->created = $row['created'];
+
     
     }
     */
     $stmt = $this->conn->query($query);
     $row = $stmt->fetch();
-    $this->title = $row['calendar_title']; 
-    $this->description = $row['calendar_desc'];
-    $this->start = $row['calendar_start'];
-    $this->end = $row['calendar_end'];
-    $this->user = $row['calendar_user_id'];
-    $this->id = $row['calendar_id'];
+	$this->todo = $row['todo'];
+	$this->notes = $row['notes'];
+	$this->title = $row['title'];
+	$this->startdate = $row['startdate'];
+	$this->duedate = $row['duedate'];
+	$this->completed = $row['completed'];
+	$this->starred = $row['starred'];
+	$this->important = $row['important'];
+	$this->deleted =$row[' deleted'];
+	$this->labels = $row['labels'];
+	$this->user = $row['user'];
+	$this->created = $row['created'];
 }
 
 // update the product
