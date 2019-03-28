@@ -1,104 +1,75 @@
 <?php
-class Calendar{
- 
-    // database connection and table name
-    private $conn;
-    private $table_name = "calendar";
- 
-    // object properties
-    public $id;
-    public $title;
-    public $description;
-    public $start;
-    public $end;
-    public $user;
-    public $created;
+class Mail_attachments{
 
-    // constructor with $db as database connection
-    public function __construct($db){
-        $this->conn = $db;
-    }
+//create database connection and table connection
+private $conn;
+private $table_name = "mail_attachements";
+
+// object properties in the database
+public $id;
+public $mail_id;
+public $mail_attachments_type;
+public $mail_attachments_fileName;
+public $mail_attachments_preview;
+public $mail_attachments_url;
+public $mail_attachments_size;
+public $mail_labels;
+public $mail_folder;
+
+ // constructor with $db as database connection
+ public function __construct($db){
+    $this->conn = $db;
+}
+
+// read products
+function read(){
     
-    // read products
-    function read(){
+    // select all query
+    $query = "SELECT
+            *
+        FROM
+            " . $this->table_name . " 
+            
+        ORDER BY
+            mail_id";
+
+    // prepare query statement
+    $stmt = $this->conn->prepare($query);
+
+    // execute query
+    $stmt->execute();
+
+    return $stmt;
+}
+
+
+
+function create(){
     
-    	// select all query
-    	$query = "SELECT
-                *
-            FROM
-                " . $this->table_name . " 
-                
-            ORDER BY
-                calendar_start";
-    
-    	// prepare query statement
-    	$stmt = $this->conn->prepare($query);
-    
-    	// execute query
-    	$stmt->execute();
-    
-    	return $stmt;
-    }
-    
-    function create(){
-    
-    	// query to insert record
-    	$query = "INSERT INTO
-                " . $this->table_name . "
-            SET
-            calendar_title=:title, calendar_desc=:description, calendar_start=:start,calendar_end=:end,calendar_user_id=:user,  created=:created";
- 
-            # file_put_contents("log.txt",$query);
- /*
- $sql = $db->prepare("INSERT INTO " . $this->table_name . " (`calendar_title`, `calendar_desc=:description`, `calendar_start`,`calendar_end`,`calendar_user_id`) VALUES (:calendar_title, :calendar_desc, :calendar_start,:calendar_end,:calendar_user_id,:created)");
- $sql->bindParam(':calendar_title', $this->title, PDO::PARAM_STR);
- $sql->bindParam(':calendar_desc', $this-description>, PDO::PARAM_STR));
- $sql->bindParam(':calendar_start',$this->start , PDO::PARAM_INT);
- $sql->bindParam(':calendar_end',$this->end , PDO::PARAM_INT);
- $sql->bindParam(':calendar_user_id',$this->user , PDO::PARAM_INT);
- $sql->bindParam(':created',$this->created , PDO::PARAM_INT);
-            */
-    	// prepare query
-    #	$stmt = $this->conn->prepare($query);
-    
-    	// sanitize
-    	$this->title=htmlspecialchars(strip_tags($this->title));
-    	$this->calendar_desc=htmlspecialchars(strip_tags($this->description));
-        $this->start=htmlspecialchars(strip_tags($this->start));
-        $this->end=htmlspecialchars(strip_tags($this->end));
-        $this->user=htmlspecialchars(strip_tags($this->user));
-        $this->created=htmlspecialchars(strip_tags($this->created));
+    // query to insert record
+    $query = "INSERT INTO
+            " . $this->table_name . "
+        SET
+    mail_id=:id, mail_attachments_type=:type, mail_attachments_fileName=:fileName, mail_attachments_preview:preview,
+    mail_attachments_url=:url, mail_attachments_size=:size, mail_labels=:labels, mail_folder=:folder, ";
+      
+        $this->mail_id=htmlspecialchars(strip_tags($this->id));
+    	$this->mail_attachments_type=htmlspecialchars(strip_tags($this->type));
+        $this->mail_attachments_fileName=htmlspecialchars(strip_tags($this->fileName));
+        $this->mail_attachments_preview=htmlspecialchars(strip_tags($this->preview));
+        $this->mail_attachments_url=htmlspecialchars(strip_tags($this->url));
+        $this->mail_attachments_size=htmlspecialchars(strip_tags($this->size));
+        $this->mail_labels=htmlspecialchars(strip_tags($this->labels));
+    	$this->mail_folder=htmlspecialchars(strip_tags($this->folder));
         
         $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-            calendar_title='".$this->title."', calendar_desc= '".$this->description."',calendar_start='".$this->start."',calendar_end='".$this->end."',calendar_user_id='".$this->user."', created='".$this->created."'";
+            mail_id='".$this->id."', mail_attachments_type= '".$this->type."', mail_attachments_fileName='".$this->fileName."', mail_attachments_preview='".$this->preview."', mail_attachments_url='".$this->url."', 
+            mail_attachments_url='".$this->url."', mail_attachments_size='".$this->size."', mail_labels='".$this->labels."', mail_folder='".$this->folder."' ;
             
-           # $stmt = $this->conn->query($query);
 
-        // bind values
-        /*
-    	$stmt->bindParam(":calendar_title", $this->title);
-    	$stmt->bindParam(":calendar_desc", $this->description);
-        $stmt->bindParam(":calendar_start", $this->start);
-        $stmt->bindParam(":calendar_end", $this->end);
-        $stmt->bindParam(":calendar_user_id", $this->user);
-        $stmt->bindParam(":created", $this->created);
-        */
-       # $sql = $this->conn->prepare("INSERT INTO sitrotest (calendar_title,calendar_desc, calendar_start,calendar_end,calendar_user_id,created) VALUES (? ,? ,?, ?, ?, ?)");
-/*
-        if($sql->execute(array($this->title, $this->description, $this->start,$this->end,$this->user,$this->created))){
-            return true;
-        }
-        */
-  
-        // execute query
-        /*
-    	if($stmt->execute()){
-    		return true;
-    	}
-*/
-if($this->conn->query($query))
+     if($this->conn->query($query))
 {
     return true;
 }
@@ -320,4 +291,5 @@ public function count(){
 }
 
 }
+
 ?>

@@ -1,18 +1,16 @@
 <?php
-class Calendar{
+class mail_folders{
  
     // database connection and table name
     private $conn;
     private $table_name = "calendar";
  
     // object properties
-    public $id;
-    public $title;
-    public $description;
-    public $start;
-    public $end;
-    public $user;
-    public $created;
+    public $folders_id;
+    public $folders_handle;
+    public $folders_title;
+    public $folders_icon;
+   
 
     // constructor with $db as database connection
     public function __construct($db){
