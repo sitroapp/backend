@@ -31,7 +31,7 @@ class Contact{
             FROM 
                   " . $this->table_name . "
                 ORDER BY
-                    contact_start";
+                    contact_last_name";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
