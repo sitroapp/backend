@@ -32,7 +32,7 @@ class User{
             FROM 
                   " . $this->table_name . "
                 ORDER BY
-                user_shortcuts";
+                user_display_name";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -50,7 +50,8 @@ class User{
         $query = "INSERT INTO
                 " . $this->table_name . "
                 SET
-              user_id=:id, user_password=:password, user_uuid=:uuid, user_shortcuts=:user_shortcuts, user_display_name=:user_display_name, role=:role, user_photo_url=:user_photo_url, user_email=:user_email, created=:created";
+              user_id=:id, user_password=:password, user_uuid=:uuid, user_shortcuts=:user_shortcuts, 
+              user_display_name=:user_display_name, role=:role, user_photo_url=:user_photo_url, user_email=:user_email, ";
    
                 $this->user_id=htmlspecialchars(strip_tags($this->user_id));
                 $this->password=htmlspecialchars(strip_tags($this->password));
@@ -65,7 +66,10 @@ class User{
                 $query = "INSERT INTO
                     " . $this->table_name . " 
                     SET
-                    user_id='".$this->id."', user_password='".$this->password."', user_uuid='".$this->uuid."', user_shortcuts='".$this->user_shortcuts."', user_display_name='".$this->user_display_name."', role='".$this->role."',  user_photo_url='".$this->user_photo_url."', user_email='".$this->user_email."', created='".$this->created."'";
+                    user_id='".$this->id."', user_password='".$this->password."', user_uuid='".$this->uuid."', 
+                    user_shortcuts='".$this->user_shortcuts."', user_display_name='".$this->user_display_name."', 
+                    role='".$this->role."',  user_photo_url='".$this->user_photo_url."',
+                     user_email='".$this->user_email."'";
 
                 if($this->conn->query($query))
                 {
@@ -117,9 +121,7 @@ function update(){
             WHERE
                 id = :id";
  
-    // prepare query statement
- #   $stmt = $this->conn->prepare($query);
- 
+    
     // sanitize
     $this->user_id=htmlspecialchars(strip_tags($this->user_id));
     $this->password=htmlspecialchars(strip_tags($this->password));
@@ -133,23 +135,11 @@ function update(){
     $query = "UPDATE
                 " . $this->table_name . "
             SET
-            user_id='".$this->id."', user_password='".$this->password."', user_uuid='".$this->uuid."', user_shortcuts='".$this->user_shortcuts."', user_display_name='".$this->user_display_name."', role='".$this->role."',  user_photo_url='".$this->user_photo_url."', user_email='".$this->user_email."', created='".$this->created."'";
+            user_id='".$this->id."', user_password='".$this->password."', user_uuid='".$this->uuid."', 
+            user_shortcuts='".$this->user_shortcuts."', user_display_name='".$this->user_display_name."', 
+            role='".$this->role."',  user_photo_url='".$this->user_photo_url."', user_email='".$this->user_email."'";
  
-    // bind new values
-    /*
-    $stmt->bindParam(':calendar_title', $this->title);
-    $stmt->bindParam(':calendar_desc', $this->description);
-    $stmt->bindParam(':calendar_start', $this->start);
-    $stmt->bindParam(':calendar_end', $this->end);
-    $stmt->bindParam(':calendar_user_id', $this->user);
-    $stmt->bindParam(':id', $this->id);
- */
-    // execute the querycalendar_description
-    /*
-    if($stmt->execute()){
-        return true;
-    }
- */
+    
 if($this->conn->query($query))
 {
     return true;
@@ -162,20 +152,12 @@ function delete(){
  
     // delete query
    
-    // prepare query
-  #  $stmt = $this->conn->prepare($query);
- 
+    
     // sanitize
     $this->id=htmlspecialchars(strip_tags($this->id));
     $query = "DELETE FROM " . $this->table_name . " WHERE user_id = '".$this->id."'";
  echo $query;
-    // bind id of record to delete
-   # $stmt->bindParam(1, $this->id);
- 
-    // execute query
-    #if($stmt->execute()){
-    #    return true;
-   # }
+    
    if($this->conn->query($query))
 {
     return true;
@@ -196,10 +178,9 @@ function search($keywords){
             FROM
                 " . $this->table_name . " 
             WHERE
-            //ask anne about these sections
-               calendar_start >= '".$this->start."' AND calendar_end <= '".$this->end."' AND  calendar_user_id = '".$this->user."'
+            user_email >= '".$this->user_email."' AND user_display_name <= '".$this->user_display_name."' AND  user_id = '".$this->user_id."'
             ORDER BY
-            calendar_start  ";
+            user_email  ";
 
             else
             $query = "SELECT
@@ -207,9 +188,9 @@ function search($keywords){
         FROM
             " . $this->table_name . " 
         WHERE
-           calendar_start >= '".$this->start."' AND calendar_end <= '".$this->end."' 
+        user_email >= '".$this->user_email."' AND v <= '".$this->user_display_name."' 
         ORDER BY
-        calendar_start  ";
+        user_email  ";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);

@@ -185,7 +185,10 @@ function update(){
     $query = "UPDATE
                 " . $this->table_name . "
             SET
-    calendar_title='".$this->title."', calendar_desc= '".$this->description."',calendar_start='".$this->start."',calendar_end='".$this->end."',calendar_user_id='".$this->user."' WHERE calendar_id='".$this->id."'";
+    calendar_title='".$this->title."', 
+    calendar_desc= '".$this->description."',calendar_start='".$this->start."',
+    calendar_end='".$this->end."',calendar_user_id='".$this->user."' 
+    WHERE calendar_id='".$this->id."'";
  
     // bind new values
     /*

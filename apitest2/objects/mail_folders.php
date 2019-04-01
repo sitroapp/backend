@@ -27,7 +27,7 @@ class mail_folders{
                 " . $this->table_name . " 
                 
             ORDER BY
-                calendar_start";
+            folders_title";
     
     	// prepare query statement
     	$stmt = $this->conn->prepare($query);
@@ -44,58 +44,22 @@ class mail_folders{
     	$query = "INSERT INTO
                 " . $this->table_name . "
             SET
-            calendar_title=:title, calendar_desc=:description, calendar_start=:start,calendar_end=:end,calendar_user_id=:user,  created=:created";
+            folders_id=:id, folders_handle=:handle, folders_title=:title, folders_icon=:icon";
  
-            # file_put_contents("log.txt",$query);
- /*
- $sql = $db->prepare("INSERT INTO " . $this->table_name . " (`calendar_title`, `calendar_desc=:description`, `calendar_start`,`calendar_end`,`calendar_user_id`) VALUES (:calendar_title, :calendar_desc, :calendar_start,:calendar_end,:calendar_user_id,:created)");
- $sql->bindParam(':calendar_title', $this->title, PDO::PARAM_STR);
- $sql->bindParam(':calendar_desc', $this-description>, PDO::PARAM_STR));
- $sql->bindParam(':calendar_start',$this->start , PDO::PARAM_INT);
- $sql->bindParam(':calendar_end',$this->end , PDO::PARAM_INT);
- $sql->bindParam(':calendar_user_id',$this->user , PDO::PARAM_INT);
- $sql->bindParam(':created',$this->created , PDO::PARAM_INT);
-            */
-    	// prepare query
-    #	$stmt = $this->conn->prepare($query);
-    
+          
     	// sanitize
-    	$this->title=htmlspecialchars(strip_tags($this->title));
-    	$this->calendar_desc=htmlspecialchars(strip_tags($this->description));
-        $this->start=htmlspecialchars(strip_tags($this->start));
-        $this->end=htmlspecialchars(strip_tags($this->end));
-        $this->user=htmlspecialchars(strip_tags($this->user));
-        $this->created=htmlspecialchars(strip_tags($this->created));
-        
-        $query = "INSERT INTO
+    	$this->folders_id=htmlspecialchars(strip_tags($this->id));
+    	$this->folders_handle=htmlspecialchars(strip_tags($this->handle));
+        $this->folders_title=htmlspecialchars(strip_tags($this->title));
+        $this->folders_icon=htmlspecialchars(strip_tags($this->icon));
+      
+          $query = "INSERT INTO
                 " . $this->table_name . "
             SET
-            calendar_title='".$this->title."', calendar_desc= '".$this->description."',calendar_start='".$this->start."',calendar_end='".$this->end."',calendar_user_id='".$this->user."', created='".$this->created."'";
+            folders_id='".$this->id."', folders_handle= '".$this->handle."',
+            folders_title='".$this->title."', folders_icon='".$this->icon."'";
             
-           # $stmt = $this->conn->query($query);
-
-        // bind values
-        /*
-    	$stmt->bindParam(":calendar_title", $this->title);
-    	$stmt->bindParam(":calendar_desc", $this->description);
-        $stmt->bindParam(":calendar_start", $this->start);
-        $stmt->bindParam(":calendar_end", $this->end);
-        $stmt->bindParam(":calendar_user_id", $this->user);
-        $stmt->bindParam(":created", $this->created);
-        */
-       # $sql = $this->conn->prepare("INSERT INTO sitrotest (calendar_title,calendar_desc, calendar_start,calendar_end,calendar_user_id,created) VALUES (? ,? ,?, ?, ?, ?)");
-/*
-        if($sql->execute(array($this->title, $this->description, $this->start,$this->end,$this->user,$this->created))){
-            return true;
-        }
-        */
-  
-        // execute query
-        /*
-    	if($stmt->execute()){
-    		return true;
-    	}
-*/
+         
 if($this->conn->query($query))
 {
     return true;
@@ -113,45 +77,17 @@ function readOne(){
             FROM
                 " . $this->table_name . " 
             WHERE
-                calendar_id = '".$this->id."'
+                folders_id = '".$this->id."'
             LIMIT
                 0,1";
  
-    // prepare query statement
-   #$stmt= $this->conn->query( $query );
-  
-  #  $stmt = $this->conn->query($query);
-    // bind id of product to be updated
-   # $stmt->bindParam(1, $this->id);
- 
-    // execute query
-  # $stmt->execute();
- 
-    // get retrieved row
-  
-  #  $row = $stmt->fetch(PDO::FETCH_ASSOC);
- 
-    // set values to object properties
-/*
-    foreach ($conn->query($query) as $row) {
-        
-    $this->title = $row['calendar_title']; 
-    $this->description = $row['calendar_desc'];
-    $this->start = $row['calendar_start'];
-    $this->end = $row['calendar_end'];
-    $this->user = $row['calendar_user_id'];
-    $this->id = $row['calendar_id'];
     
-    }
-    */
     $stmt = $this->conn->query($query);
     $row = $stmt->fetch();
-    $this->title = $row['calendar_title']; 
-    $this->description = $row['calendar_desc'];
-    $this->start = $row['calendar_start'];
-    $this->end = $row['calendar_end'];
-    $this->user = $row['calendar_user_id'];
-    $this->id = $row['calendar_id'];
+    $this->title = $row['folders_title']; 
+    $this->handle = $row['folders_handle'];
+    $this->icon = $row['folders_icon'];
+    $this->id = $row['folder_id'];
 }
 
 // update the product
@@ -161,45 +97,28 @@ function update(){
     $query = "UPDATE
                 " . $this->table_name . "
             SET
-                calendar_title = :title,
-                calendar_desc = :description,
-                calendar_start = :start,
-                calendar_end = :end,
-                calendar_user_id = :user
+            folders_id = :id,
+            folders_handle = :handle,
+            folders_title = :title,
+            folders_icon = :icon,
             WHERE
                 id = :id";
  
-    // prepare query statement
- #   $stmt = $this->conn->prepare($query);
+
  
     // sanitize
-    $this->title=htmlspecialchars(strip_tags($this->title));
-    $this->description=htmlspecialchars(strip_tags($this->description));
-    $this->start=htmlspecialchars(strip_tags($this->start));
-    $this->end=htmlspecialchars(strip_tags($this->end));
-    $this->user=htmlspecialchars(strip_tags($this->user));
-    $this->id=htmlspecialchars(strip_tags($this->id));
+    $this->folders_id=htmlspecialchars(strip_tags($this->id));
+    $this->folders_handle=htmlspecialchars(strip_tags($this->handle));
+    $this->folders_title=htmlspecialchars(strip_tags($this->title));
+    $this->folders_icon=htmlspecialchars(strip_tags($this->icon));
 
     $query = "UPDATE
                 " . $this->table_name . "
             SET
-    calendar_title='".$this->title."', calendar_desc= '".$this->description."',calendar_start='".$this->start."',calendar_end='".$this->end."',calendar_user_id='".$this->user."' WHERE calendar_id='".$this->id."'";
+            folders_id='".$this->id."', folders_handle= '".$this->handle."',
+            folders_title='".$this->title."',folders_icon='".$this->icon."' WHERE folders_id='".$this->id."'";
  
-    // bind new values
-    /*
-    $stmt->bindParam(':calendar_title', $this->title);
-    $stmt->bindParam(':calendar_desc', $this->description);
-    $stmt->bindParam(':calendar_start', $this->start);
-    $stmt->bindParam(':calendar_end', $this->end);
-    $stmt->bindParam(':calendar_user_id', $this->user);
-    $stmt->bindParam(':id', $this->id);
- */
-    // execute the querycalendar_description
-    /*
-    if($stmt->execute()){
-        return true;
-    }
- */
+    
 if($this->conn->query($query))
 {
     return true;
@@ -212,20 +131,11 @@ function delete(){
  
     // delete query
    
-    // prepare query
-  #  $stmt = $this->conn->prepare($query);
- 
     // sanitize
     $this->id=htmlspecialchars(strip_tags($this->id));
-    $query = "DELETE FROM " . $this->table_name . " WHERE calendar_id = '".$this->id."'";
+    $query = "DELETE FROM " . $this->table_name . " WHERE folders_id = '".$this->id."'";
  echo $query;
-    // bind id of record to delete
-   # $stmt->bindParam(1, $this->id);
- 
-    // execute query
-    #if($stmt->execute()){
-    #    return true;
-   # }
+  
    if($this->conn->query($query))
 {
     return true;
@@ -246,9 +156,9 @@ function search($keywords){
             FROM
                 " . $this->table_name . " 
             WHERE
-               calendar_start >= '".$this->start."' AND calendar_end <= '".$this->end."' AND  calendar_user_id = '".$this->user."'
+            folders_title >= '".$this->title."' AND folders_handle <= '".$this->handle."' AND  folders_id = '".$this->id."'
             ORDER BY
-            calendar_start  ";
+            folders_title  ";
 
             else
             $query = "SELECT
@@ -256,9 +166,9 @@ function search($keywords){
         FROM
             " . $this->table_name . " 
         WHERE
-           calendar_start >= '".$this->start."' AND calendar_end <= '".$this->end."' 
+        folders_title >= '".$this->title."' AND folders_handle <= '".$this->handle."' 
         ORDER BY
-        calendar_start  ";
+        folders_title  ";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);

@@ -66,7 +66,8 @@ function create(){
                 " . $this->table_name . "
             SET
             mail_id='".$this->id."', mail_attachments_type= '".$this->type."', mail_attachments_fileName='".$this->fileName."', mail_attachments_preview='".$this->preview."', mail_attachments_url='".$this->url."', 
-            mail_attachments_url='".$this->url."', mail_attachments_size='".$this->size."', mail_labels='".$this->labels."', mail_folder='".$this->folder."' ;
+            mail_attachments_url='".$this->url."', mail_attachments_size='".$this->size."',
+            mail_labels='".$this->labels."', mail_folder='".$this->folder."'";
             
 
      if($this->conn->query($query))
@@ -90,41 +91,16 @@ function readOne(){
             LIMIT
                 0,1";
  
-    // prepare query statement
-   #$stmt= $this->conn->query( $query );
-  
-  #  $stmt = $this->conn->query($query);
-    // bind id of product to be updated
-   # $stmt->bindParam(1, $this->id);
- 
-    // execute query
-  # $stmt->execute();
- 
-    // get retrieved row
-  
-  #  $row = $stmt->fetch(PDO::FETCH_ASSOC);
- 
-    // set values to object properties
-/*
-    foreach ($conn->query($query) as $row) {
-        
-    $this->title = $row['calendar_title']; 
-    $this->description = $row['calendar_desc'];
-    $this->start = $row['calendar_start'];
-    $this->end = $row['calendar_end'];
-    $this->user = $row['calendar_user_id'];
-    $this->id = $row['calendar_id'];
-    
-    }
-    */
     $stmt = $this->conn->query($query);
     $row = $stmt->fetch();
-    $this->title = $row['calendar_title']; 
-    $this->description = $row['calendar_desc'];
-    $this->start = $row['calendar_start'];
-    $this->end = $row['calendar_end'];
-    $this->user = $row['calendar_user_id'];
-    $this->id = $row['calendar_id'];
+    $this->mail_id = $row['id']; 
+    $this->mail_attachments_type = $row['type'];
+    $this->mail_attachments_fileName = $row['fileName'];
+    $this->mail_attachments_preview = $row['preview'];
+    $this->mail_attachments_url = $row['url'];
+    $this->mail_attachments_size = $row['size'];
+    $this->mail_labels = $row['labels'];
+    $this->mail_folder = $row['folder'];
 }
 
 // update the product
@@ -134,45 +110,35 @@ function update(){
     $query = "UPDATE
                 " . $this->table_name . "
             SET
-                calendar_title = :title,
-                calendar_desc = :description,
-                calendar_start = :start,
-                calendar_end = :end,
-                calendar_user_id = :user
+            mail_id = :id,
+            mail_attachments_type = :type,
+            mail_attachments_fileName = :fileName,
+            mail_attachments_preview = :preview,
+            mail_attachments_url = :url,
+            mail_attachments_size = :size,
+            mail_labels = :labels,
+            mail_folder = :folder,
             WHERE
                 id = :id";
  
-    // prepare query statement
- #   $stmt = $this->conn->prepare($query);
- 
     // sanitize
-    $this->title=htmlspecialchars(strip_tags($this->title));
-    $this->description=htmlspecialchars(strip_tags($this->description));
-    $this->start=htmlspecialchars(strip_tags($this->start));
-    $this->end=htmlspecialchars(strip_tags($this->end));
-    $this->user=htmlspecialchars(strip_tags($this->user));
-    $this->id=htmlspecialchars(strip_tags($this->id));
+    $this->mail_id=htmlspecialchars(strip_tags($this->id));
+    $this->mail_attachments_type=htmlspecialchars(strip_tags($this->type));
+    $this->mail_attachments_fileName=htmlspecialchars(strip_tags($this->fileName));
+    $this->mail_attachments_preview=htmlspecialchars(strip_tags($this->preview));
+    $this->mail_attachments_url=htmlspecialchars(strip_tags($this->url));
+    $this->mail_attachments_size=htmlspecialchars(strip_tags($this->size));
+    $this->mail_labels=htmlspecialchars(strip_tags($this->labels));
+    $this->mail_folder=htmlspecialchars(strip_tags($this->folder));
 
     $query = "UPDATE
                 " . $this->table_name . "
             SET
-    calendar_title='".$this->title."', calendar_desc= '".$this->description."',calendar_start='".$this->start."',calendar_end='".$this->end."',calendar_user_id='".$this->user."' WHERE calendar_id='".$this->id."'";
- 
-    // bind new values
-    /*
-    $stmt->bindParam(':calendar_title', $this->title);
-    $stmt->bindParam(':calendar_desc', $this->description);
-    $stmt->bindParam(':calendar_start', $this->start);
-    $stmt->bindParam(':calendar_end', $this->end);
-    $stmt->bindParam(':calendar_user_id', $this->user);
-    $stmt->bindParam(':id', $this->id);
- */
-    // execute the querycalendar_description
-    /*
-    if($stmt->execute()){
-        return true;
-    }
- */
+            mail_id='".$this->id."', mail_attachments_type= '".$this->type."',mail_attachments_fileName='".$this->fileName."',
+            mail_attachments_preview='".$this->preview."',mail_attachments_url='".$this->url."',
+            mail_attachments_size='".$this->size."',mail_labels='".$this->labels."',mail_folder='".$this->folder."'
+              WHERE id='".$this->id."'";
+    
 if($this->conn->query($query))
 {
     return true;
@@ -185,20 +151,12 @@ function delete(){
  
     // delete query
    
-    // prepare query
-  #  $stmt = $this->conn->prepare($query);
- 
+   
     // sanitize
     $this->id=htmlspecialchars(strip_tags($this->id));
-    $query = "DELETE FROM " . $this->table_name . " WHERE calendar_id = '".$this->id."'";
+    $query = "DELETE FROM " . $this->table_name . " WHERE mail_id = '".$this->id."'";
  echo $query;
-    // bind id of record to delete
-   # $stmt->bindParam(1, $this->id);
- 
-    // execute query
-    #if($stmt->execute()){
-    #    return true;
-   # }
+    
    if($this->conn->query($query))
 {
     return true;
@@ -219,9 +177,9 @@ function search($keywords){
             FROM
                 " . $this->table_name . " 
             WHERE
-               calendar_start >= '".$this->start."' AND calendar_end <= '".$this->end."' AND  calendar_user_id = '".$this->user."'
+            mail_attachments_fileName >= '".$this->name."' AND mail_attachments_type <= '".$this->type."' AND  mail_id = '".$this->id."'
             ORDER BY
-            calendar_start  ";
+            mail_attachments_fileName  ";
 
             else
             $query = "SELECT
@@ -229,9 +187,9 @@ function search($keywords){
         FROM
             " . $this->table_name . " 
         WHERE
-           calendar_start >= '".$this->start."' AND calendar_end <= '".$this->end."' 
+        mail_attachments_fileName >= '".$this->name."' AND mail_attachments_type <= '".$this->type."' 
         ORDER BY
-        calendar_start  ";
+        mail_attachments_fileName  ";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);
